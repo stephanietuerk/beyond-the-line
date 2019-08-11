@@ -14,9 +14,25 @@ export const mapWidth = 600;
 export const mapHeight = 380;
 export const lineWidth = 60;
 export const lineHeight = 350;
-export const barsWidth = 400;
-export const barsHeight = 3500;
-export const barsContainerMargin = {left: 20, top: 50, right: 0, bottom: 0};
+export const barsContainer = {
+    width: 600,
+    height: 700,
+    margin: {left: 20, top: 20, right: 0, bottom: 0}
+};
+export const barsIndex = {
+    width: 40,
+    height: 700,
+    margin: {left: 20, top: 30, right: 0, bottom: 0}
+};
+export const bars = {
+    width: 400,
+    height: 700,
+    margin: {left: barsIndex.margin.left + barsIndex.width + 50, top: barsIndex.margin.top, right: 0, bottom: 0}
+};
+
+// export const barsWidth = 400;
+// export const barsHeight = 3500;
+// export const barsContainerMargin = {left: 20, top: 50, right: 0, bottom: 0};
 
 export const placeNamesOn = true;
 
