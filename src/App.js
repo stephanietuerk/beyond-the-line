@@ -8,7 +8,6 @@ import geoLabels from './data/PA_Cities.json';
 import * as config from './utilities/config';
 import * as topojson from "topojson-client";
 import BarsContainer from './components/Bars/BarsContainer';
-import { noConflict } from 'q';
 
 export default class App extends Component {
 
@@ -88,8 +87,7 @@ export default class App extends Component {
           </div> */}
           <div className='bars-container'>
             <BarsContainer
-              svgDimensions={[config.barsWidth, config.barsHeight]}
-              margin={config.barsContainerMargin}
+              dimensions={config.barsContainer}
               barsData={(topojson.feature(this.state.geoData, this.state.geoData.objects.PA_CensusTracts_2010).features).map(geometry => geometry.properties)}
               barsVar={this.state.barsVar}
               marginVar={this.state.marginVar}

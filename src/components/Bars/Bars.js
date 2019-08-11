@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react';
 import * as d3 from 'd3';
-import { min, max, histogram } from 'd3-array';
 import * as config from '../../utilities/config';
 import { chunk } from 'lodash';
+import ColorsHelper from '../../utilities/colors.helper';
 
 export default class Bars extends PureComponent {
     
-    
     constructor(props) {
         super(props);
+        this.colorsHelper = new ColorsHelper;
         this.draw = this.draw.bind(this);
     }
     
@@ -51,52 +51,13 @@ export default class Bars extends PureComponent {
       return prunedData;
     }
 
-    getColor(val) {
-      const marginVar = this.props.marginVar;
-      const voteColorRed = d3.scaleLinear()
-        .domain([0,1])
-        .range(config.voteRedRange);
-      const voteColorBlue = d3.scaleLinear()
-        .domain([-1,0])
-        .range(config.voteBlueRange);
-      const changeColorRed = d3.scaleLinear()
-        .domain([0,.5])
-        .range(config.changeRedRange);
-      const changeColorBlue = d3.scaleLinear()
-        .domain([-0.5,0])
-        .range(config.changeBlueRange);
-        
-      if (isNaN(val)) {
-        return config.initialColor;
-      }
-      else {
-        if (val >= 0) {
-          if (marginVar.includes('CHANGE')) {
-            return changeColorRed(val);
-          }
-          else {
-            return voteColorRed(val);
-            }
-          } 
-        else if (val < 0) {
-          if (marginVar.includes('CHANGE')) {
-            return changeColorBlue(val);
-          }
-          else {
-            return voteColorBlue(val);
-          }
-        }
-      }
-    }
-
     getAvgProperty(arr, property) {
       return arr.reduce((acc, curr) => acc + Number(curr[`${property}`]), 0)/arr.length;
     }
 
     draw() {
-      const barsG = this.refs.barsG;
-      const { barsVar, marginVar, svgDimensions } = this.props;
-      const [width, height] = svgDimensions;
+      const g = this.refs.barsG;
+      const { barsVar, marginVar, dimensions } = this.props;
       const sortedData = this.sortData().filter(tractObj => !isNaN(tractObj[barsVar]));
       // const rankedData = this.rankData(sortedData);
       // const prunedData = this.pruneData(sortedData);
@@ -108,16 +69,15 @@ export default class Bars extends PureComponent {
 
       const xScale = d3.scaleLinear()
         .domain([demoMin, demoMax])
-        .range([0, width]);
+        .range([0, dimensions.width]);
 
       const yScale = d3.scaleLinear()
         .domain([0, dataChunks.length])
         .range([0, dataChunks.length]);
 
-      d3.select(barsG)
+      d3.select(g)
         .selectAll('.bar')
         .data(dataChunks)
-        // .data(prunedData)
         .join('rect')
         .attr('class', 'bar')
         .attr('y', (d, i, n) => yScale(i))
@@ -126,22 +86,21 @@ export default class Bars extends PureComponent {
           return xScale(Math.min(0, this.getAvgProperty(d, barsVar)));
         })
         .attr('width', d => {
-          // const avg = d.reduce((curr, acc) => curr[barsVar] + acc)/d.length;
-          const avgWidth = Math.abs(xScale(this.getAvgProperty(d, barsVar))-xScale(0));
-          // const toReturn = Math.abs(xScale(d[barsVar])-xScale(0));
-          return avgWidth;
+          return Math.abs(xScale(this.getAvgProperty(d, barsVar))-xScale(0));
         })
         .style('fill', d => {
-          // const avg = d.reduce((curr, acc) => curr[marginVar] + acc)/d.length;
-          return this.getColor(this.getAvgProperty(d, marginVar));
+          return this.colorsHelper.getColor(this.getAvgProperty(d, marginVar), marginVar);
         });
     }
 
     render() {
-      const zoomTransform = this.props.zoomTransform;
+      const dimensions = this.props.dimensions;
+      const offset = `translate(${dimensions.margin.left}, ${dimensions.margin.top})`;
+      // const zoomTransform = this.props.zoomTransform;
       return (         
         <g 
-          transform={zoomTransform}
+          // transform={zoomTransform}
+          transform={offset}
           ref='barsG'
         >
         </g>
