@@ -48,14 +48,10 @@ export default class DemoLine extends Component {
       const { demoVar, svgDimensions } = this.props;
       const [width, height] = svgDimensions;
       const sortedData = this.sortData();
-      console.log(demoVar);
-      console.log(sortedData);
       const rankedData = this.rankData(sortedData).filter(tractObj => !isNaN(tractObj[demoVar]));
-      console.log(rankedData);
       const demoMin = min(rankedData.map(tractObj => Number(tractObj[demoVar])));
       const demoMax = max(rankedData.map(tractObj => Number(tractObj[demoVar])));
     
-      console.log(demoMin, demoMax);
       const xScale = scaleLinear()
         .domain([demoMin, demoMax])
         .range([0, width]);

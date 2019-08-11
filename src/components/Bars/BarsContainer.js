@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { select, selectAll } from 'd3-selection';
 import { event as d3event} from 'd3-selection';
 import { line } from 'd3-shape';
@@ -8,7 +8,7 @@ import Bars from './Bars';
 import * as config from '../../utilities/config';
 
 
-export default class BarsContainer extends Component {
+export default class BarsContainer extends PureComponent {
     
     
     constructor(props) {
@@ -25,11 +25,13 @@ export default class BarsContainer extends Component {
     }
 
     createChart() {
-      select(this.refs.svg)
+      select(this.refs.svg);
     }
 
     render() {
       const [width, height] = this.props.svgDimensions;
+      const move = `translate(${this.props.margin.left}, ${this.props.margin.top})`;
+
 
       return (
         <div>
@@ -38,12 +40,17 @@ export default class BarsContainer extends Component {
             height={height}
             ref='svg'
           >
-            <Bars
-              svgDimensions={this.props.svgDimensions}
-              demoData={this.props.demoData}
-              demoVar={this.props.demoVar}
-              marginVar={this.props.marginVar}
-            />
+            <g
+              transform={move}
+            >
+              <Bars
+                svgDimensions={this.props.svgDimensions}
+                barsData={this.props.barsData}
+                barsVar={this.props.barsVar}
+                marginVar={this.props.marginVar}
+                // zoomTransform={zoomTransform}
+              />
+            </g>
           </svg>
         </div>
       );

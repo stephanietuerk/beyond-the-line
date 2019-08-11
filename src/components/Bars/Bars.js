@@ -1,38 +1,35 @@
-import React, { Component } from 'react';
-import { select, selectAll } from 'd3-selection';
+import React, { PureComponent } from 'react';
 import * as d3 from 'd3';
-import { scaleLinear } from 'd3-scale';
 import { min, max, histogram } from 'd3-array';
 import * as config from '../../utilities/config';
 import { chunk } from 'lodash';
 
-export default class Bars extends Component {
+export default class Bars extends PureComponent {
     
     
     constructor(props) {
         super(props);
-        this.createChart = this.createChart.bind(this);
+        this.draw = this.draw.bind(this);
     }
     
     componentDidMount() {
-        this.createChart();
     }
 
     componentDidUpdate() {
-        this.createChart();
+        this.draw();
     }
 
     sortData() {
-      const { demoData, demoVar } = this.props;
-      const sorted = demoData.sort((a, b) => {
-    		if(!isFinite(a[demoVar] && !isFinite(b[demoVar]))) {
+      const { barsData, barsVar } = this.props;
+      const sorted = barsData.sort((a, b) => {
+    		if(!isFinite(a[barsVar] && !isFinite(b[barsVar]))) {
 			    return 0;
-		    } else if (!isFinite(a[demoVar]) ) {
+		    } else if (!isFinite(a[barsVar]) ) {
           return 1;
-        } else if (!isFinite(b[demoVar]) ) {
+        } else if (!isFinite(b[barsVar]) ) {
 	        return -1;
         }
-		    return +b[demoVar] > +a[demoVar] ? 1 : +b[demoVar] < +a[demoVar] ? -1 : 0;
+		    return +b[barsVar] > +a[barsVar] ? 1 : +b[barsVar] < +a[barsVar] ? -1 : 0;
       });
       return sorted;
     }
@@ -41,7 +38,17 @@ export default class Bars extends Component {
       return sortedData.map((tractObj, i) => {
         tractObj.position = i;
         return tractObj;
-      })
+      });
+    }
+
+    pruneData(sortedData) {
+      const prunedData = [];
+      const delta = 6;
+      let i;
+      for (i = 0; i < sortedData.length; i=i+delta) {
+        prunedData.push(sortedData[i]);
+      }
+      return prunedData;
     }
 
     getColor(val) {
@@ -65,13 +72,13 @@ export default class Bars extends Component {
       else {
         if (val >= 0) {
           if (marginVar.includes('CHANGE')) {
-            return changeColorRed(val)
+            return changeColorRed(val);
           }
           else {
             return voteColorRed(val);
             }
           } 
-        if (val < 0) {
+        else if (val < 0) {
           if (marginVar.includes('CHANGE')) {
             return changeColorBlue(val);
           }
@@ -82,53 +89,51 @@ export default class Bars extends Component {
       }
     }
 
-    createChart() {
-      const barsG = this.refs.barsG;
-      const { demoVar, marginVar, svgDimensions } = this.props;
-      const [width, height] = svgDimensions;
-      const sortedData = this.sortData();
-      console.log(demoVar, this.props.marginVar);
-      console.log(sortedData);
-      const rankedData = this.rankData(sortedData).filter(tractObj => !isNaN(tractObj[demoVar]));
-      console.log(rankedData);
-      const demoMin = min(rankedData.map(tractObj => Number(tractObj[demoVar])));
-      const demoMax = max(rankedData.map(tractObj => Number(tractObj[demoVar])));
-    
-      console.log(demoMin, demoMax);
+    getAvgProperty(arr, property) {
+      return arr.reduce((acc, curr) => acc + Number(curr[`${property}`]), 0)/arr.length;
+    }
 
-      const xScale = scaleLinear()
+    draw() {
+      const barsG = this.refs.barsG;
+      const { barsVar, marginVar, svgDimensions } = this.props;
+      const [width, height] = svgDimensions;
+      const sortedData = this.sortData().filter(tractObj => !isNaN(tractObj[barsVar]));
+      // const rankedData = this.rankData(sortedData);
+      // const prunedData = this.pruneData(sortedData);
+      const demoMin = d3.min(sortedData.map(tractObj => Number(tractObj[barsVar])));
+      const demoMax = d3.max(sortedData.map(tractObj => Number(tractObj[barsVar])));
+
+      const combineVal = 5;
+      const dataChunks = chunk(sortedData, combineVal);
+
+      const xScale = d3.scaleLinear()
         .domain([demoMin, demoMax])
         .range([0, width]);
 
-      const yScale = scaleLinear()
-        .domain([0, rankedData.length])
-        .range([0, height]);
-
-      // const bins = histogram()
-      //   .domain([0,1])
-      //   .thresholds(600);
-
-      // const binnedData = bins(rankedData.map(d => d[marginVar]));
-      // console.group(binnedData);
-      const combineVal = 6;
+      const yScale = d3.scaleLinear()
+        .domain([0, dataChunks.length])
+        .range([0, dataChunks.length]);
 
       d3.select(barsG)
         .selectAll('.bar')
-        .data(sortedData)
-        // .data(chunk(rankedData, combineVal))
+        .data(dataChunks)
+        // .data(prunedData)
         .join('rect')
         .attr('class', 'bar')
         .attr('y', (d, i, n) => yScale(i))
         .attr('height', 1)
-        .attr('x', d => xScale(Math.min(0, d[demoVar])))
+        .attr('x', d => {
+          return xScale(Math.min(0, this.getAvgProperty(d, barsVar)));
+        })
         .attr('width', d => {
-          // console.log(d);
-          // const avg = d.reduce((curr, acc) => curr[demoVar] + acc)/d.length;
-          return Math.abs(xScale(d[demoVar])-xScale(0));
+          // const avg = d.reduce((curr, acc) => curr[barsVar] + acc)/d.length;
+          const avgWidth = Math.abs(xScale(this.getAvgProperty(d, barsVar))-xScale(0));
+          // const toReturn = Math.abs(xScale(d[barsVar])-xScale(0));
+          return avgWidth;
         })
         .style('fill', d => {
           // const avg = d.reduce((curr, acc) => curr[marginVar] + acc)/d.length;
-          return this.getColor(d[marginVar]);
+          return this.getColor(this.getAvgProperty(d, marginVar));
         });
     }
 

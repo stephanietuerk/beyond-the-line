@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import '../../App.css';
+import '../../App.scss';
 import Map from './Map';
 import { select, selectAll } from 'd3-selection';
 import { event as d3event} from 'd3-selection';
@@ -12,7 +12,6 @@ import * as config from '../../utilities/config';
 export default class MapContainer extends PureComponent {
 
     constructor(props) {
-      console.log(config.placeNamesOn);
       super(props);
       this.state = {
         placeNamesOn: config.placeNamesOn,
@@ -31,7 +30,6 @@ export default class MapContainer extends PureComponent {
     }
 
     componentDidUpdate() {
-      console.log('map component updated');
       select(this.refs.svg)
         .selectAll('rect')
         .remove();
@@ -62,7 +60,6 @@ export default class MapContainer extends PureComponent {
 
 
     zoomed() {
-      console.log(d3event.transform);
       this.setState({
         zoomTransform: d3event.transform,
         zoomLevel: d3event.transform.k
@@ -93,9 +90,9 @@ export default class MapContainer extends PureComponent {
         .on('mouseover', () => {
           mapZoomBox
             .style('stroke', config.initialColor)
-              .style('stroke-width', '3px')
-              .style('stroke-linecap', 'butt')
-              .style('stroke-dasharray', '2, 3');
+            .style('stroke-width', '3px')
+            .style('stroke-linecap', 'butt')
+            .style('stroke-dasharray', '2, 3');
         })
         .on('mouseout', () => {
           mapZoomBox
@@ -110,8 +107,8 @@ export default class MapContainer extends PureComponent {
       return (
         <div>
           <div className='map-instructions'>
-            <p className='explore-text'>zoom and move map to explore</p>
-            <p className='zoom-text'>double click or pinch to zoom</p>
+            <p id='explore-text'>zoom and move map to explore</p>
+            <p id='zoom-text'>double click or pinch to zoom</p>
           </div>
           <svg
             width={width}
@@ -128,12 +125,12 @@ export default class MapContainer extends PureComponent {
               placeNamesOn={placeNamesOn}
             />
           </svg>
-          <div className='map-view-controls'>
-            <button className='map-button' onClick={this.togglePlaceNames}>
+          <div className='map-controls'>
+            <button className='button' id='placenames-button' onClick={this.togglePlaceNames}>
               {this.state.placeNamesOn ? 'placenames: on' : 'placenames: off'}
             </button>
             {this.state.zoomLevel > 1 &&
-              <button className='map-button' onClick={() => this.resetZoom()}>reset zoom</button>
+              <button className='button' id='zoom-button' onClick={() => this.resetZoom()}>reset zoom</button>
             }
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import '../../App.css'
+import '../../App.scss';
 import { select, selectAll, event } from 'd3-selection';
 import {geoPath, geoAlbers } from 'd3-geo';
 import { scaleLinear, scaleThreshold } from 'd3-scale';
@@ -13,22 +13,21 @@ export default class Map extends PureComponent {
 
     constructor(props) {
       super(props);
-      this.createMap = this.createMap.bind(this);
+      this.draw = this.draw.bind(this);
         
         // this.updateChart = this.updateChart.bind(this);
         // this.destroyChart = this.destroyChart.bind(this);
     }
     
     componentDidMount() {
-      this.createMap();
+      // this.createMap();
     }
 
     componentDidUpdate() {
-      console.log('map updated');
       select(this.refs.mapG)
         .selectAll('g')
         .remove();
-      this.createMap();
+      this.draw();
     }
 
 
@@ -106,7 +105,7 @@ export default class Map extends PureComponent {
         });
     }
     
-    createMap() {
+    draw() {
       const mapG = this.refs.mapG;
       const [mapWidth, mapHeight] = this.props.svgDimensions;
       const { geoData, geoLabels, zoomLevel } = this.props;

@@ -10,71 +10,72 @@ export const voteBlueRange = ['#3c5bff', '#d2e4ff'];
 export const changeRedRange = ['#f8e5e6','#dd0035'];
 export const changeBlueRange = ['#3c5bff', '#e6f0ff'];
 
-
 export const mapWidth = 600;
 export const mapHeight = 380;
 export const lineWidth = 60;
 export const lineHeight = 350;
-export const barsWidth = 600;
+export const barsWidth = 400;
 export const barsHeight = 3500;
+export const barsContainerMargin = {left: 20, top: 50, right: 0, bottom: 0};
 
 export const placeNamesOn = true;
 
-export const initMapDate = '2016';
-export const initMapRace = 'potus';
-export const initDemoSelection = 'popden';
+export const initDate = '2016';
+export const initRace = 'potus';
+export const initDemo = 'popden';
 export const initDemoChange = false;
 export const initGeoLabels = true;
+export const initMarginVar = 'USP_MARGIN_2016';
+export const initBarsVar = 'POPDEN_2015';
 
-export const yearOptions = [
+export const dateOptions = [
     {
-        text: '2016',
-        code: '2016'
+        displayText: '2016',
+        value: '2016'
     },
     {
-        text: '2012',
-        code: '2012'
+        displayText: '2012',
+        value: '2012'
     },
     {
-        text: 'change',
-        code: 'change'
+        displayText: 'change',
+        value: 'change'
     }
 ];
 
 export const raceOptions = [
     {
-        text: 'president',
-        code: 'potus'
+        displayText: 'president',
+        value: 'potus'
     }, {
-        text: 'us senate',
-        code: 'senate'
+        displayText: 'us senate',
+        value: 'senate'
     }, {
-        text: 'us house',
-        code: 'house'
+        displayText: 'us house',
+        value: 'house'
     }
 ];
 
 export const demoOptions = [
     {
-        text: 'population density',
-        code: 'popden'
+        displayText: 'population density',
+        value: 'popden'
     }, {
-        text: 'percent non-white',
-        code: 'nonwhite'
+        displayText: 'percent non-white',
+        value: 'nonwhite'
     },{
-        text: 'unemployment rate',
-        code: 'unemployed'
+        displayText: 'unemployment rate',
+        value: 'unemployment'
     },{
-        text: 'education',
-        code: 'college'
+        displayText: 'education',
+        value: 'college'
     },{
-        text: 'income',
-        code: 'income'
+        displayText: 'income',
+        value: 'income'
     }
 ];
-export const demoChangeOptions = [
-    {
-        text: 'change 2010-2015',
-        code: 'demochange'
-    }
-];
+export const demoChangeOptions = {
+        displayText: 'change 2010-2015',
+        value: 'demochange'
+    };
+

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { getDemoVar, getMarginVar } from './utilities/selection.helper';
+import SelectionHelper from './utilities/selection.helper';
 import MapContainer from './components/Map/MapContainer';
 import DemoLine from './components/DemoLine';
-// import BarsComponent from './components/BarsComponent';
 import Controls from './components/Selector/Controls';
-import geoData from './data/paTracts.json';
+import geoData from './data/paTracts_sm.json';
 import geoLabels from './data/PA_Cities.json';
 import * as config from './utilities/config';
 import * as topojson from "topojson-client";
 import BarsContainer from './components/Bars/BarsContainer';
+import { noConflict } from 'q';
 
 export default class App extends Component {
 
@@ -16,20 +16,21 @@ export default class App extends Component {
     super(props);
     this.state = {
       geoData: geoData,
-      mapDate: config.initMapDate,
-      mapRace: config.initMapRace,
-      demoSelection: config.initDemoSelection,
+      race: config.initRace,
+      date: config.initDate,
+      demo: config.initDemo,
       demoChange: config.initDemoChange,
-      geoLabels: geoLabels
+      marginVar: config.initMarginVar,
+      barsVar: config.initBarsVar,
+      geoLabels: geoLabels,
+      dataLoaded: false
     };
     this.toggleDemoChange = this.toggleDemoChange.bind(this);
+    this.selectionHelper = new SelectionHelper;
   }
 
   componentDidMount() {
-    const { mapDate, mapRace, demoSelection, demoChange } = this.state;
     this.setState({
-      marginVar: getMarginVar(mapDate, mapRace),
-      demoVar: getDemoVar(demoSelection, demoChange),
       dataLoaded: true
     });
   }
@@ -37,21 +38,15 @@ export default class App extends Component {
   componentDidUpdate() {
   }
 
-  setRace(race) {
-    this.setState({
-      mapRace: race,
-    });
+  updateSelection(selection) {
+    this.setState(selection, this.updateVars);
   }
 
-  setYear(year) {
+  updateVars() {
+    const { date, race, demo, demoChange } = this.state;
     this.setState({
-      mapDate: year,
-    });
-  }
-
-  setDemo(demo) {
-    this.setState({
-      demoSelection: demo,
+      marginVar: this.selectionHelper.getMarginVar(date, race),
+      barsVar: this.selectionHelper.getBarsVar(demo, demoChange)
     });
   }
 
@@ -62,52 +57,47 @@ export default class App extends Component {
   }
   
   render() {
-    console.log(this.state.demoSelection, this.state.demoChange, this.state.mapRace, this.state.mapDate);    
-
-    return (
-      <div className='app'>
-        <div className='left-column'>
-        <Controls
-            raceOptions = {config.raceOptions}
-            setRace = {race => this.setRace(race)}
-            raceSelection = {this.state.race}
-            yearOptions = {config.yearOptions}
-            setYear = {year => this.setYear(year)}
-            yearSelection = {this.state.year}
-            demoOptions = {config.demoOptions}
-            setDemo = {demo => this.setDemo(demo)}
-            demoSelection = {this.state.demo}
-            demoChangeOptions = {config.demoChangeOptions}
-            toggleDemoChange = {this.toggleDemoChange}
-            demoChangeSelection = {this.state.demoChange}
-          />
-          <MapContainer
-            svgDimensions={[config.mapWidth, config.mapHeight]}
-            geoData={this.state.geoData}
-            geoLabels={this.state.geoLabels}
-            marginVar={this.state.marginVar}
-          />
+      return (
+        <div className='app'>
+          <div className='left-column'>
+            <Controls
+              setSelection = {selection => this.updateSelection(selection)}
+              toggleDemoChange = {this.toggleDemoChange}
+              raceOptions = {config.raceOptions}
+              dateOptions = {config.dateOptions}
+              demoOptions = {config.demoOptions}
+              demoChangeOptions = {config.demoChangeOptions}
+              race = {this.state.race}
+              date = {this.state.date}
+              demo = {this.state.demo}
+              demoChange = {this.state.demoChange}
+            />
+            <MapContainer
+              svgDimensions={[config.mapWidth, config.mapHeight]}
+              geoData={this.state.geoData}
+              geoLabels={this.state.geoLabels}
+              marginVar={this.state.marginVar}
+            />
+          </div>
+          {/* <div>
+            <DemoLine
+              svgDimensions={[config.lineWidth, config.lineHeight]}
+              demoData={(topojson.feature(this.state.data, this.state.data.objects.PA_CensusTracts_2010).features).map(geometry => geometry.properties)}
+              demoVar={this.getDemoVar()}
+            />
+          </div> */}
+          <div className='bars-container'>
+            <BarsContainer
+              svgDimensions={[config.barsWidth, config.barsHeight]}
+              margin={config.barsContainerMargin}
+              barsData={(topojson.feature(this.state.geoData, this.state.geoData.objects.PA_CensusTracts_2010).features).map(geometry => geometry.properties)}
+              barsVar={this.state.barsVar}
+              marginVar={this.state.marginVar}
+            />
+          </div>
         </div>
-        <div className='controls'>
-          
-        </div>
-        {/* <div>
-          <DemoLine
-            svgDimensions={[config.lineWidth, config.lineHeight]}
-            demoData={(topojson.feature(this.state.data, this.state.data.objects.PA_CensusTracts_2010).features).map(geometry => geometry.properties)}
-            demoVar={this.getDemoVar()}
-          />
-        </div> */}
-        <div className='bars-container'>
-          <BarsContainer
-            svgDimensions={[config.barsWidth, config.barsHeight]}
-            demoData={(topojson.feature(this.state.geoData, this.state.geoData.objects.PA_CensusTracts_2010).features).map(geometry => geometry.properties)}
-            demoVar={this.state.demoVar}
-            marginVar={this.state.marginVar}
-          />
-        </div>
-      </div>
-    );
-  }
+        );
+      }
 }
+
 

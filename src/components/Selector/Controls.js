@@ -9,19 +9,19 @@ export default class Controls extends PureComponent {
           <ButtonSelector
             buttonClass={'race'}
             buttonVals={this.props.raceOptions}
-            setSelection={race => this.props.setRace(race)}
-            selected={this.props.raceSelection}
+            setSelection={value => this.props.setSelection({ race: value })}
+            selected={this.props.race}
           />
         </div>
       );
 
-      const yearSelector = () => (
+      const dateSelector = () => (
         <div>
           <ButtonSelector
-            buttonClass={'year'}
-            buttonVals={this.props.yearOptions}
-            setSelection={year => this.props.setYear(year)}
-            selected={this.props.yearSelection}
+            buttonClass={'date'}
+            buttonVals={this.props.dateOptions}
+            setSelection={value => this.props.setSelection({ date: value })}
+            selected={this.props.date}
           />
         </div>
       );
@@ -31,8 +31,8 @@ export default class Controls extends PureComponent {
           <ButtonSelector
             buttonClass={'demo'}
             buttonVals={this.props.demoOptions}
-            setSelection={demo => this.props.setDemo(demo)}
-            selected={this.props.demoSelection}
+            setSelection={value => this.props.setSelection({ demo: value })}
+            selected={this.props.demo}
           />
         </div>
       );
@@ -40,19 +40,19 @@ export default class Controls extends PureComponent {
       const demoChangeSelector = () => (
         <div>
           <button
-            key={this.props.demoChangeOptions}
-            className={this.props.demoChangeSelection ? 'btn btn-active demo-change' : 'btn btn-inactive demo-change'}
+            key={this.props.demoChangeOptions.value}
+            className={this.props.demoChange ? 'button button-active demo-change' : 'button button-inactive demo-change'}
             onClick={this.props.toggleDemoChange}
           >
-            {'change 2010-2015'}
+            {this.props.demoChangeOptions.displayText}
           </button>
         </div>
       );
 
       return (
-        <div className = 'button-controls'>
+        <div className = 'selector-controls'>
           {raceSelector()}
-          {yearSelector()}
+          {dateSelector()}
           {demoSelector()}
           {demoChangeSelector()}
         </div>

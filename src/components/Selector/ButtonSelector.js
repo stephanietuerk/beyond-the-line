@@ -2,14 +2,13 @@ import React, { PureComponent } from 'react';
 
 export default class ButtonSelector extends PureComponent {
   render() {
-    const selected = this.props.selected;
     const buttonGroup = (this.props.buttonVals).map(val => (
       <button
-        key={val.text}
-        className={selected === val.code ? `btn btn-active ${ this.props.buttonClass }` : `btn btn-inactive ${ this.props.buttonClass }`}
-        onClick={() => this.props.setSelection(val.code)}
+        key={val.value}
+        className={this.props.selected === val.value ? `button button-active ${ this.props.buttonClass }` : `button button-inactive ${ this.props.buttonClass }`}
+        onClick={() => this.props.setSelection(val.value)}
         >
-        {val.text}
+        {val.displayText}
       </button>
     ));
 

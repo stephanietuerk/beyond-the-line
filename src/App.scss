@@ -15,68 +15,57 @@
 .bars-container {
 
 }
-.btn {
+.button:focus {
+  outline:0 !important;
+}
+.selector-controls .button {
   border: none;
   font: 11px 'Roboto Mono';
-  color: #cccccc;
   cursor: pointer;
   text-align: center;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  transition: background 150ms ease-in-out, 
-              transform 50ms ease;
+  outline: 0;
 }
 
-.btn:hover,
-.btn:focus {
-  background: #eeeeee;
-  outline:0;
+.selector-controls .button-inactive {
+  color: #555555;
 }
-.btn-active {
-  color: #bbbbbb;
+
+.selector-controls .button-inactive:hover {
+  background: #e0e0e0;
 }
-/* .btn-group {
-  position: relative;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-evenly;
-  align-items: center;
-  border-radius: 0px;
-  border: 1px solid #bbbbbb;
-} */
-.map-view-controls {
-  text-align: right;
+
+.selector-controls .button-active {
+  background: #ccc;
 }
-.map-button {
+
+.map-controls {
+  text-align: left;
+}
+.map-controls .button {
   border: none;
   font: 11px 'Roboto Mono';
-  color: #cccccc;
+  color: #555555;
   cursor: pointer;
-  text-align: center;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  transition: background 250ms ease-in-out, 
-              transform 150ms ease;
 }
 
-.map-button:hover,
-.map-button:focus {
-  background: #eeeeee;
+.map-controls .button:hover,
+.map-controls .button:focus {
+  background: #e0e0e0;
   outline:0;
 }
 
-.explore-text{
+.map-instructions {
   display: block;
-  text-align: right;
+  text-align: left;
+  letter-spacing: 0.12rem; 
+  color: #888888;
+}
+#explore-text{
   font: 12px 'Roboto Mono';
-  color: #cccccc;
   line-height: 6pt;
 }
-.zoom-text{
-  display: block;
-  text-align: right;
+#zoom-text{
   font: 10px 'Roboto Mono';
-  color: #cccccc;
   line-height: 0pt;
 }
 
