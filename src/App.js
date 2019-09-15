@@ -3,39 +3,40 @@ import SelectionHelper from './utilities/selection.helper';
 import MapContainer from './components/Map/MapContainer';
 import DemoLine from './components/DemoLine';
 import Controls from './components/Selector/Controls';
-import geoData from './data/paTracts_sm.json';
-import geoLabels from './data/PA_Cities.json';
+import attrData from './data/pa_attribute_data.csv';
 import * as config from './utilities/config';
-import * as topojson from "topojson-client";
 import BarsContainer from './components/Bars/BarsContainer';
+import DataHelper from './utilities/data.helper';
+import Bars from './components/Bars/Bars';
 
 export default class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      geoData: geoData,
       race: config.initRace,
       date: config.initDate,
       demo: config.initDemo,
       demoChange: config.initDemoChange,
       marginVar: config.initMarginVar,
       barsVar: config.initBarsVar,
-      geoLabels: geoLabels,
-      dataLoaded: false
+      marginData: null,
+      demoData: null
     };
     this.toggleDemoChange = this.toggleDemoChange.bind(this);
-    this.selectionHelper = new SelectionHelper;
+    this.selectionHelper = new SelectionHelper();
+    this.dataHelper = new DataHelper();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const { marginVar, barsVar } = this.state;
+    this.data = await this.dataHelper.processData(attrData);
     this.setState({
-      dataLoaded: true
+      marginData: this.data[marginVar],
+      demoData: this.data[barsVar]
     });
   }
 
-  componentDidUpdate() {
-  }
+  componentDidUpdate() {}
 
   updateSelection(selection) {
     this.setState(selection, this.updateVars);
@@ -43,59 +44,73 @@ export default class App extends Component {
 
   updateVars() {
     const { date, race, demo, demoChange } = this.state;
+    const marginVar = this.selectionHelper.getMarginVar(date, race);
+    const barsVar = this.selectionHelper.getBarsVar(demo, demoChange);
     this.setState({
-      marginVar: this.selectionHelper.getMarginVar(date, race),
-      barsVar: this.selectionHelper.getBarsVar(demo, demoChange)
+      marginVar,
+      barsVar,
+      marginData: this.data[marginVar],
+      demoData: this.data[barsVar]
     });
   }
 
   toggleDemoChange() {
     this.setState(prevState => ({
-      demoChange: !prevState.demoChange,
+      demoChange: !prevState.demoChange
     }));
   }
-  
+
   render() {
-      return (
-        <div className='app'>
-          <div className='left-column'>
-            <Controls
-              setSelection = {selection => this.updateSelection(selection)}
-              toggleDemoChange = {this.toggleDemoChange}
-              raceOptions = {config.raceOptions}
-              dateOptions = {config.dateOptions}
-              demoOptions = {config.demoOptions}
-              demoChangeOptions = {config.demoChangeOptions}
-              race = {this.state.race}
-              date = {this.state.date}
-              demo = {this.state.demo}
-              demoChange = {this.state.demoChange}
-            />
-            <MapContainer
-              svgDimensions={[config.mapWidth, config.mapHeight]}
-              geoData={this.state.geoData}
-              geoLabels={this.state.geoLabels}
-              marginVar={this.state.marginVar}
-            />
-          </div>
-          {/* <div>
+    console.log('render');
+    return (
+      <div className="app">
+        <div className="left-column">
+          <Controls
+            setSelection={selection => this.updateSelection(selection)}
+            toggleDemoChange={this.toggleDemoChange}
+            raceOptions={config.raceOptions}
+            dateOptions={config.dateOptions}
+            demoOptions={config.demoOptions}
+            demoChangeOptions={config.demoChangeOptions}
+            race={this.state.race}
+            date={this.state.date}
+            demo={this.state.demo}
+            demoChange={this.state.demoChange}
+          />
+          <MapContainer
+            marginVar={this.state.marginVar}
+            data={this.state.marginData}
+          />
+        </div>
+        {/* <div>
             <DemoLine
               svgDimensions={[config.lineWidth, config.lineHeight]}
               demoData={(topojson.feature(this.state.data, this.state.data.objects.PA_CensusTracts_2010).features).map(geometry => geometry.properties)}
               demoVar={this.getDemoVar()}
             />
           </div> */}
-          <div className='bars-container'>
+        <div className="bars-container">
+          {this.state.demoData && this.state.marginData && (
             <BarsContainer
-              dimensions={config.barsContainer}
-              barsData={(topojson.feature(this.state.geoData, this.state.geoData.objects.PA_CensusTracts_2010).features).map(geometry => geometry.properties)}
-              barsVar={this.state.barsVar}
+              demoData={this.state.demoData}
+              marginData={this.state.marginData}
+              demoVar={this.state.barsVar}
               marginVar={this.state.marginVar}
             />
-          </div>
+          )}
+          {/* <BarsContainer
+            dimensions={config.barsContainer}
+            data={topojson
+              .feature(
+                this.state.geoData,
+                this.state.geoData.objects.PA_CensusTracts_2010
+              )
+              .features.map(geometry => geometry.properties)}
+            barsVar={this.state.barsVar}
+            marginVar={this.state.marginVar}
+          /> */}
         </div>
-        );
-      }
+      </div>
+    );
+  }
 }
-
-
