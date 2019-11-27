@@ -1,4 +1,6 @@
 import { chunk } from 'lodash';
+import * as d3 from 'd3';
+import * as config from '../../utilities/config';
 
 export default class BarsDataHelper {
   getAvgProperty(arr, property) {
@@ -6,28 +8,6 @@ export default class BarsDataHelper {
       arr.reduce((acc, curr) => acc + Number(curr[`${property}`]), 0) /
       arr.length
     );
-  }
-
-  sortData(data, barsVar, removeNan) {
-    const sortedData = data.sort((a, b) => {
-      if (!isFinite(a[barsVar] && !isFinite(b[barsVar]))) {
-        return 0;
-      } else if (!isFinite(a[barsVar])) {
-        return 1;
-      } else if (!isFinite(b[barsVar])) {
-        return -1;
-      }
-      return +b[barsVar] > +a[barsVar] ? 1 : +b[barsVar] < +a[barsVar] ? -1 : 0;
-    });
-
-    return !removeNan
-      ? sortedData
-      : sortedData.filter(tractObj => !isNaN(tractObj[barsVar]));
-  }
-
-  sortAndChunkData(data, combineVal, barsVar, removeNan) {
-    const sortedData = this.sortData(data, barsVar, removeNan);
-    return chunk(sortedData, combineVal);
   }
 
   sortDataObj(data, removeNan, valueName) {
@@ -68,9 +48,28 @@ export default class BarsDataHelper {
     const newData = chunks.map(chunk => {
       return {
         demoVal: this.getAvgProperty(chunk, 'demoVal'),
-        marginVal: this.getAvgProperty(chunk, 'marginVal')
+        marginVal: this.getAvgProperty(chunk, 'marginVal'),
+        geoIds: chunk.map(obj => obj.geoId)
       };
     });
     return newData;
+  }
+
+  getQuantileVals(data) {
+    return d3.range(config.numBarQuantiles + 1).map(num => {
+      return d3.quantile(data, num / config.numBarQuantiles);
+    });
+  }
+
+  formatQuantileValues(vals, demoVar) {
+    const format =
+      demoVar.includes('Change') ||
+      demoVar === 'nonWhite' ||
+      demoVar === 'unemployment' ||
+      demoVar === 'collge'
+        ? d3.format('.0%')
+        : demoVar === 'income'
+        ? d3.format('$2f')
+        : d3.format('.1f');
   }
 }
