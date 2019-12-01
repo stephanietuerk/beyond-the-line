@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import '../../styles/App.scss';
 import * as d3 from 'd3';
 import ColorsHelper from '../../utilities/colors.helper';
 import * as config from '../../utilities/config';

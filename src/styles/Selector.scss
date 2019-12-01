@@ -1,0 +1,32 @@
+@import './mixins.scss';
+
+:host {
+  @include reset;
+}
+
+.button {
+  border: none;
+  font: 11px 'Roboto Mono';
+  cursor: pointer;
+  text-align: center;
+  outline: 0;
+
+  &:focus {
+    outline: 0 !important;
+  }
+}
+
+.button-active {
+  background: #ccc;
+}
+
+.button-inactive {
+  color: #555555;
+
+  &:hover {
+    background: #e8e8e8;
+  }
+}
+
+.button-group {
+}
