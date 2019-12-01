@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import Bars from './Bars';
 import BarsIndex from './BarsIndex';
 import * as config from '../../utilities/config';
-import BarsDataHelper from './bars-data.helper';
+import BarsDataHelper from '../../utilities/bars-data.helper';
 
 export default class BarsContainer extends PureComponent {
   constructor(props) {

@@ -1,6 +1,6 @@
 import { chunk } from 'lodash';
 import * as d3 from 'd3';
-import * as config from '../../utilities/config';
+import * as config from './config';
 
 export default class BarsDataHelper {
   getAvgProperty(arr, property) {
