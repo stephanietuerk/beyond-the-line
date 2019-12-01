@@ -56,9 +56,12 @@ export default class App extends Component {
   }
 
   toggleDemoChange() {
-    this.setState(prevState => ({
-      demoChange: !prevState.demoChange
-    }));
+    this.setState(
+      prevState => ({
+        demoChange: !prevState.demoChange
+      }),
+      this.updateVars
+    );
   }
 
   render() {

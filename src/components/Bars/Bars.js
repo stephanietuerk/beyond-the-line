@@ -3,7 +3,7 @@ import '../../styles/App.scss';
 import * as d3 from 'd3';
 import ColorsHelper from '../../utilities/colors.helper';
 import * as config from '../../utilities/config';
-import BarsDataHelper from './bars-data.helper';
+import BarsDataHelper from '../../utilities/bars-data.helper';
 
 export default class Bars extends PureComponent {
   constructor(props) {
