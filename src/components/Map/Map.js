@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import '../../App.scss';
+import '../../styles/App.scss';
 import * as d3 from 'd3';
 import { feature } from 'topojson-client';
 import * as config from '../../utilities/config';
@@ -116,6 +116,7 @@ export default class Map extends PureComponent {
         )
       )
       .attr('class', 'city')
+      .attr('vector-effect', 'non-scaling-stroke')
       .attr('visibility', d => this.getPlaceNameVis(+d.properties.Population));
 
     labelsG

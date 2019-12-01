@@ -35,6 +35,7 @@ export const bars = {
   }
 };
 export const barsZoomLevels = 5;
+export const numBarQuantiles = 10;
 
 // export const barsWidth = 400;
 // export const barsHeight = 3500;

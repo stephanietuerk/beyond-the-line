@@ -1,0 +1,331 @@
+@import './mixins.scss';
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol,
+li,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  box-sizing: border-box;
+  font-family: 'Roboto Mono', Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 20px 20px;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+.main-vis {
+  display: flex;
+  justify-content: space-evenly;
+  height: 100%;
+}
+
+/////////////////////////
+///     CONTROLS      ///
+/////////////////////////
+.selector-controls {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+
+  .button {
+    border: none;
+    font: 11px 'Roboto Mono';
+    cursor: pointer;
+    text-align: center;
+    outline: 0;
+
+    &:focus {
+      outline: 0 !important;
+    }
+  }
+
+  .button-active {
+    background: #ccc;
+  }
+
+  .button-inactive {
+    color: #555555;
+
+    &:hover {
+      background: #e8e8e8;
+    }
+  }
+
+  .button-group {
+    display: flex;
+    margin-bottom: 0.2rem;
+  }
+}
+
+/////////////////////////
+///        MAP        ///
+/////////////////////////
+.map-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.instructions-text {
+  letter-spacing: 0.12rem;
+  color: #888888;
+}
+
+.explore-text {
+  font-size: 12px;
+  margin-bottom: 0.4rem;
+}
+
+.zoom-text {
+  font-size: 10px;
+  margin-bottom: 0.6rem;
+}
+
+.map-controls {
+  text-align: left;
+  font-family: 'Roboto Mono';
+
+  .button {
+    font-family: 'Roboto Mono';
+    border: none;
+    font-size: 11px;
+    color: #555555;
+    cursor: pointer;
+  }
+
+  .button:hover,
+  .button::focus {
+    background: #e0e0e0;
+    outline: 0;
+  }
+}
+
+.click-overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.click-overlay-variable {
+  fill: none;
+}
+.map-text {
+  font: 12px Roboto Mono;
+  font-weight: 400;
+  fill: #cccccc;
+  stroke: none;
+  text-anchor: end;
+}
+.map-text-sm {
+  font: 10px Roboto Mono;
+  font-weight: 400;
+  fill: #cccccc;
+  stroke: none;
+  text-anchor: end;
+}
+.map-sel-text {
+  font: 11px Roboto Mono;
+  font-weight: 400;
+  fill: #cccccc;
+  stroke: none;
+  text-anchor: end;
+}
+.reset-text {
+  font: 14px Roboto Mono;
+  font-weight: 400;
+  fill: #bbbbbb;
+  stroke: none;
+  text-anchor: end;
+}
+
+.city {
+  fill: none;
+  stroke: black;
+}
+
+.city-label {
+  font: 9px Roboto Mono;
+  font-weight: 400;
+  fill: black;
+  stroke: none;
+}
+
+.tracts-non-brushed {
+  stroke: none;
+  /*stroke: #bebebe;*/
+  stroke-linejoin: round;
+}
+.tracts-brushed {
+  stroke: #bbbbbb;
+  stroke-width: 2px;
+  opacity: 0.5;
+  /*stroke-dasharray: 2, 2;*/
+  stroke-linecap: butt;
+}
+
+/////////////////////////
+///       BARS        ///
+/////////////////////////
+
+// body {
+//   font-family: 'Roboto', Helvetica, sans-serif;
+//   overflow-wrap: normal;
+//   /*width: 1200px;*/
+//   text-align: justify-all;
+//   text-wrap: normal;
+//   margin-left: auto;
+//   margin-right: auto;
+// }
+// .axis text {
+//   font: 10px sans-serif;
+// }
+// .axis path,
+// .axis line {
+//   fill: none;
+//   stroke: #000;
+//   shape-rendering: crispEdges;
+// }
+// .y.axis path {
+//   stroke-dasharray: 4, 4;
+// }
+// .zero.axis path {
+//   stroke-dasharray: 4, 4;
+// }
+// .grid line {
+//   stroke-dasharray: 4, 4;
+//   stroke: #cccccc;
+//   stroke-opacity: 0.7;
+//   shape-rendering: crispEdges;
+// }
+// .grid .tick {
+//   stroke: #cccccc;
+//   stroke-dasharray: 4, 4;
+//   opacity: 0.85;
+//   shape-rendering: crispEdges;
+// }
+// .grid path {
+//   stroke-width: 0;
+// }
+// .chart-label {
+//   font: 11px Roboto Mono;
+//   /*font: 12px sans-serif;*/
+//   fill: #bbbbbb;
+//   text-anchor: end;
+// }
+// .chart-yaxis-label {
+//   font: 11px Roboto Mono;
+//   /*font: 12px sans-serif;*/
+//   fill: #bbbbbb;
+//   text-anchor: end;
+// }
+// .legend-labels text {
+//   font: 10px sans-serif;
+//   /*font: 12px sans-serif;*/
+//   fill: #bbbbbb;
+//   text-anchor: middle;
+// }
+// .colorBar-label {
+//   font: 11px Roboto Mono;
+//   text-anchor: middle;
+// }
+// .color-bar-brushed {
+//   /*opacity: 0.6;*/
+// }
+// .dots {
+//   stroke: #cccccc;
+//   stroke-opacity: 0.5;
+// }
+// .dots-non-brushed {
+// }
+
+// .demoBarsSelBtn-rect-noPress {
+//   fill: #bbbbbb;
+//   stroke: white;
+//   stroke-width: 1px;
+// }
+// .demoBarsSelBtn-text-noPress {
+//   font: 10px 'Roboto Mono';
+//   font-weight: 400;
+//   fill: white;
+//   stroke: none;
+//   text-anchor: middle;
+//   dominant-baseline: central;
+// }
+// .demoBarsSelBtn-rect-press {
+//   fill: white;
+//   stroke: #bbbbbb;
+//   stroke-width: 1px;
+// }
+// .demoBarsSelBtn-text-press {
+//   font: 10px 'Roboto Mono';
+//   font-weight: 400;
+//   fill: #bbbbbb;
+//   stroke: none;
+//   text-anchor: middle;
+//   dominant-baseline: central;
+// }
+// .voteMapSelBtn-rect-noPress {
+//   fill: #bbbbbb;
+//   stroke: white;
+//   stroke-width: 1px;
+// }
+// .voteMapSelBtn-text-noPress {
+//   font: 10px 'Roboto Mono';
+//   font-weight: 400;
+//   fill: white;
+//   stroke: none;
+//   text-anchor: middle;
+//   dominant-baseline: central;
+// }
+// .voteMapSelBtn-rect-press {
+//   fill: white;
+//   stroke: #bbbbbb;
+//   stroke-width: 1px;
+// }
+// .voteMapSelBtn-text-press {
+//   font: 10px 'Roboto Mono';
+//   font-weight: 400;
+//   fill: #bbbbbb;
+//   stroke: none;
+//   text-anchor: middle;
+//   dominant-baseline: central;
+// }
+// .selBtn-rect-hover {
+//   fill: #cccccc;
+//   /*			stroke: white;
+//   stroke-width: 1px;*/
+// }
+// .selBtn-text-hover {
+//   fill: white;
+// }
+// .demoBars-title {
+//   font: 18px 'Roboto Mono';
+//   font-weight: 300;
+//   fill: #aaaaaa;
+//   stroke: none;
+//   text-anchor: middle;
+// }
+// .voteMap-title {
+//   font: 18px 'Roboto Mono';
+//   font-weight: 300;
+//   fill: #aaaaaa;
+//   stroke: none;
+//   text-anchor: middle;
+// }
+.hover {
+  stroke: '#ffffff';
+}

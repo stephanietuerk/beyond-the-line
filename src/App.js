@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import SelectionHelper from './utilities/selection.helper';
 import MapContainer from './components/Map/MapContainer';
 import DemoLine from './components/DemoLine';
-import Controls from './components/Selector/Controls';
+import SelectorControls from './components/Selector/SelectorControls';
 import attrData from './data/pa_attribute_data.csv';
 import * as config from './utilities/config';
 import BarsContainer from './components/Bars/BarsContainer';
 import DataHelper from './utilities/data.helper';
 import Bars from './components/Bars/Bars';
+import './styles/App.scss';
 
 export default class App extends Component {
   constructor(props) {
@@ -64,32 +65,23 @@ export default class App extends Component {
     console.log('render');
     return (
       <div className="app">
-        <div className="left-column">
-          <Controls
-            setSelection={selection => this.updateSelection(selection)}
-            toggleDemoChange={this.toggleDemoChange}
-            raceOptions={config.raceOptions}
-            dateOptions={config.dateOptions}
-            demoOptions={config.demoOptions}
-            demoChangeOptions={config.demoChangeOptions}
-            race={this.state.race}
-            date={this.state.date}
-            demo={this.state.demo}
-            demoChange={this.state.demoChange}
-          />
+        <SelectorControls
+          setSelection={selection => this.updateSelection(selection)}
+          toggleDemoChange={this.toggleDemoChange}
+          raceOptions={config.raceOptions}
+          dateOptions={config.dateOptions}
+          demoOptions={config.demoOptions}
+          demoChangeOptions={config.demoChangeOptions}
+          race={this.state.race}
+          date={this.state.date}
+          demo={this.state.demo}
+          demoChange={this.state.demoChange}
+        />
+        <div className="main-vis">
           <MapContainer
             marginVar={this.state.marginVar}
             data={this.state.marginData}
           />
-        </div>
-        {/* <div>
-            <DemoLine
-              svgDimensions={[config.lineWidth, config.lineHeight]}
-              demoData={(topojson.feature(this.state.data, this.state.data.objects.PA_CensusTracts_2010).features).map(geometry => geometry.properties)}
-              demoVar={this.getDemoVar()}
-            />
-          </div> */}
-        <div className="bars-container">
           {this.state.demoData && this.state.marginData && (
             <BarsContainer
               demoData={this.state.demoData}
@@ -98,19 +90,15 @@ export default class App extends Component {
               marginVar={this.state.marginVar}
             />
           )}
-          {/* <BarsContainer
-            dimensions={config.barsContainer}
-            data={topojson
-              .feature(
-                this.state.geoData,
-                this.state.geoData.objects.PA_CensusTracts_2010
-              )
-              .features.map(geometry => geometry.properties)}
-            barsVar={this.state.barsVar}
-            marginVar={this.state.marginVar}
-          /> */}
         </div>
       </div>
+      /* <div>
+            <DemoLine
+              svgDimensions={[config.lineWidth, config.lineHeight]}
+              demoData={(topojson.feature(this.state.data, this.state.data.objects.PA_CensusTracts_2010).features).map(geometry => geometry.properties)}
+              demoVar={this.getDemoVar()}
+            />
+          </div> */
     );
   }
 }

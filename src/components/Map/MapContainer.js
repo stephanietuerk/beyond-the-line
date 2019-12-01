@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import '../../App.scss';
+import '../../styles/App.scss';
 import Map from './Map';
 import * as d3 from 'd3';
 import * as config from '../../utilities/config';
@@ -72,11 +72,13 @@ export default class MapContainer extends PureComponent {
     const { zoomLevel, zoomTransform, placeNamesOn } = this.state;
 
     return (
-      <div>
-        <div className="map-instructions">
-          <p id="explore-text">zoom and move map to explore</p>
-          <p id="zoom-text">double click or pinch to zoom</p>
-        </div>
+      <div className="map-container">
+        <p className="instructions-text explore-text">
+          zoom and move map to explore
+        </p>
+        <p className="instructions-text zoom-text">
+          double click or pinch to zoom
+        </p>
         <svg width={config.mapWidth} height={config.mapHeight} ref="svg">
           <Map
             marginVar={this.props.marginVar}
@@ -88,16 +90,14 @@ export default class MapContainer extends PureComponent {
         </svg>
         <div className="map-controls">
           <button
-            className="button"
-            id="placenames-button"
+            className="button placenames-button"
             onClick={this.togglePlaceNames}
           >
             {this.state.placeNamesOn ? 'placenames: on' : 'placenames: off'}
           </button>
           {this.state.zoomLevel > 1 && (
             <button
-              className="button"
-              id="zoom-button"
+              className="button zoom-button"
               onClick={() => this.resetZoom()}
             >
               reset zoom

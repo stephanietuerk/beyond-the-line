@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import '../../styles/App.scss';
 import * as d3 from 'd3';
 import Bars from './Bars';
 import BarsIndex from './BarsIndex';
@@ -88,7 +89,6 @@ export default class BarsContainer extends PureComponent {
   render() {
     const dimensions = config.barsContainer;
     const offset = `translate(${dimensions.margin.left}, ${dimensions.margin.top})`;
-    console.log('bc render');
 
     return (
       <div>
